@@ -1,25 +1,24 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "quickmail",
+	"name": "rmail",
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"compatibility_date": "2025-06-01",
 	"compatibility_flags": ["nodejs_compat", "enable_nodejs_http_modules"],
-	"workers_dev": true,
+	"workers_dev": false,
 
 	// Your Cloudflare account is picked up from `wrangler login`. If you belong
 	// to more than one account, set CLOUDFLARE_ACCOUNT_ID in your environment
 	// or uncomment this and paste the ID from the Cloudflare dashboard sidebar.
 	// "account_id": "",
 
-	// Deploys to <name>.<your-subdomain>.workers.dev out of the box. To serve it
-	// from your own domain instead, uncomment this and make sure the zone is on
-	// the same Cloudflare account.
-	// "routes": [
-	// 	{
-	// 		"pattern": "mail.example.com",
-	// 		"custom_domain": true
-	// 	}
-	// ],
+	// Served from a custom domain. The zone (94streetstudio.xyz) must be on the
+	// same Cloudflare account; Cloudflare provisions the DNS record + TLS cert.
+	"routes": [
+		{
+			"pattern": "rmail.94streetstudio.xyz",
+			"custom_domain": true
+		}
+	],
 
 	"assets": {
 		"directory": ".svelte-kit/cloudflare",
@@ -41,19 +40,22 @@
 		"CLOUDFLARE_MAIL_DOMAINS": ""
 	},
 
-	"send_email": [
-		{
-			"name": "EMAIL",
-			"remote": true
-		}
-	],
+	// Commented out for local dev: `remote: true` forces a remote Cloudflare
+	// proxy session (needs CLOUDFLARE_API_TOKEN). Only used by EMAIL_PROVIDER=cloudflare.
+	// Restore before deploying with the Cloudflare email provider.
+	// "send_email": [
+	// 	{
+	// 		"name": "EMAIL",
+	// 		"remote": true
+	// 	}
+	// ],
 
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "quickmail",
 			// `bun run setup` fills this in, or: wrangler d1 create <name>
-			"database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+			"database_id": "4fa7755d-26fd-4a01-9343-35136b233d55",
 			"migrations_dir": "migrations"
 		}
 	],
